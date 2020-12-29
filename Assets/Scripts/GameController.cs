@@ -9,6 +9,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private List<PathNode> m_receivers;
     [SerializeField] private List<GameObject> m_gifts;
     [SerializeField] private Text m_scoreText;
+    [SerializeField] private GameObject m_railwayTile;
 
     private float m_timeSinceStart;
 
@@ -19,6 +20,8 @@ public class GameController : MonoBehaviour
     {
         m_timeSinceStart = 0.0f;
         m_score = 0;
+
+        InstantiateRailway();
     }
 
     // Update is called once per frame
@@ -90,5 +93,51 @@ public class GameController : MonoBehaviour
         }
 
         m_scoreText.text = string.Format("{0}: {1}", "Score", m_score);
+    }
+
+    private void InstantiateRailway()
+    {
+        if (m_spawners.Count == 0 || !m_railwayTile)
+        {
+            return;
+        }
+
+        TraverseNode(m_spawners[0]);
+    }
+
+    private void TraverseNode(PathNode node)
+    {
+        var links = node.getLinks();
+        if (links.Count == 0)
+        {
+            return;
+        }
+
+        Sprite sp = m_railwayTile.GetComponent<SpriteRenderer>().sprite;
+        if (!sp)
+        {
+            return;
+        }
+
+        foreach (PathNode otherNode in links)
+        {
+            var from = (Vector2)node.transform.position;
+            var to = (Vector2)otherNode.transform.position;
+
+            Vector2 dir = (to - from).normalized;
+            float distance = (to - from).magnitude;
+
+            float spWidth = sp.bounds.size.x;
+
+            int tilesCount = (int)(distance / spWidth) + 1;
+
+            for (int i = 0; i < tilesCount; ++i)
+            {
+                float angle = Vector2.SignedAngle(new Vector2(1, 0), dir);
+                Instantiate(m_railwayTile, (Vector2)node.transform.position + (dir * (i * spWidth + spWidth / 2.0f)), Quaternion.AngleAxis(angle, new Vector3(0, 0, 1)));
+            }
+
+            TraverseNode(otherNode);
+        }
     }
 }

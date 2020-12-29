@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.Events;
 
 [System.Serializable]
@@ -8,23 +9,33 @@ public class GiftReceivedEvent : UnityEvent<PathNode>
 
 public class Gift : MonoBehaviour
 {
+    [SerializeField] private Sprite[] m_gifts;
+    private int selectedGiftIndex = 0;
+
     public GiftReceivedEvent m_event;
 
     public PathNode m_prevNode;
     public PathNode m_nextNode;
 
-    // Start is called before the first frame update
     void Start()
     {
-
+        Initialize();
     }
 
-    // Update is called once per frame
     void Update()
     {
         UpdateNodes();
         UpdatePosition();
         UpdateScore();
+    }
+
+    private void Initialize()
+    {
+        SpriteRenderer[] renderes = GetComponentsInChildren<SpriteRenderer>();
+        Assert.IsTrue(renderes.Length >= 2);
+
+        selectedGiftIndex = Random.Range(0, m_gifts.Length);
+        renderes[1].sprite = m_gifts[selectedGiftIndex];
     }
 
     private void UpdateNodes()
@@ -34,7 +45,7 @@ public class Gift : MonoBehaviour
             return;
         }
 
-        const float distanceThreshold = 0.1f;
+        const float distanceThreshold = 0.01f;
         if (Vector2.Distance(transform.position, m_nextNode.transform.position) > distanceThreshold)
         {
             return;

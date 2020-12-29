@@ -32,6 +32,7 @@ public class PathNode : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        UpdateRotation();
     }
 
     void OnDrawGizmos()
@@ -63,5 +64,27 @@ public class PathNode : MonoBehaviour
         }
 
         m_selectedNode = (m_selectedNode + 1) % m_links.Count;
+    }
+
+    private void UpdateRotation()
+    {
+        if (m_links.Count == 0)
+        {
+            return;
+        }
+
+        Vector2 dir = ((Vector2)getNextNode().transform.position - (Vector2)transform.position).normalized;
+
+        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        if (!sr)
+        {
+            return;
+        }
+
+
+        float angle = Vector2.SignedAngle(new Vector2(1, 0), dir);
+        // Debug.Log(angle);
+        // Debug.DrawLine((Vector2)transform.position, (Vector2)transform.position + 10 * dir, Color.red);
+        sr.transform.rotation = Quaternion.AngleAxis(angle, new Vector3(0, 0, 1));
     }
 }
