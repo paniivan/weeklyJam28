@@ -102,11 +102,20 @@ public class GameController : MonoBehaviour
             return;
         }
 
-        TraverseNode(m_spawners[0]);
+        List<PathNode> s = new List<PathNode>();
+        foreach (PathNode node in m_spawners)
+        {
+            TraverseNode(s, node);
+        }
     }
 
-    private void TraverseNode(PathNode node)
+    private void TraverseNode(List<PathNode> s, PathNode node)
     {
+        if (s.Find(item => item == node))
+        {
+            return;
+        }
+
         var links = node.getLinks();
         if (links.Count == 0)
         {
@@ -134,10 +143,17 @@ public class GameController : MonoBehaviour
             for (int i = 0; i < tilesCount; ++i)
             {
                 float angle = Vector2.SignedAngle(new Vector2(1, 0), dir);
-                Instantiate(m_railwayTile, (Vector2)node.transform.position + (dir * (i * spWidth + spWidth / 2.0f)), Quaternion.AngleAxis(angle, new Vector3(0, 0, 1)));
-            }
 
-            TraverseNode(otherNode);
+                Vector2 pos = (Vector2)node.transform.position + (dir * (i * spWidth + spWidth / 2.0f));
+                Instantiate(m_railwayTile, (Vector3)pos + m_railwayTile.transform.position, Quaternion.AngleAxis(angle, new Vector3(0, 0, 1)));
+            }
+        }
+
+        s.Add(node);
+
+        foreach (PathNode otherNode in links)
+        {
+            TraverseNode(s, otherNode);
         }
     }
 }
