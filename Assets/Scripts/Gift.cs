@@ -9,7 +9,14 @@ public class GiftReceivedEvent : UnityEvent<PathNode>
 
 public class Gift : MonoBehaviour
 {
-    [SerializeField] private Sprite[] m_gifts;
+    [System.Serializable]
+    public class GiftData
+    {
+        public Sprite m_sprite;
+        public int m_value;
+    }
+
+    [SerializeField] private GiftData[] m_gifts;
     private int selectedGiftIndex = 0;
 
     public GiftReceivedEvent m_event;
@@ -29,13 +36,40 @@ public class Gift : MonoBehaviour
         UpdateScore();
     }
 
+    private int GetNextGiftIndex()
+    {
+        int index = 0;
+
+        int sum = 0;
+        for (int i = 0; i < m_gifts.Length; ++i)
+        {
+            sum += m_gifts[i].m_value;
+        }
+
+        int sumValue = UnityEngine.Random.Range(0, sum);
+        Debug.Log(sumValue);
+
+        int tmpSum = 0;
+        for (int i = 0; i < m_gifts.Length; ++i)
+        {
+            tmpSum += m_gifts[i].m_value;
+            if (sumValue < tmpSum)
+            {
+                index = i;
+                break;
+            }
+        }
+
+        return index;
+    }
+
     private void Initialize()
     {
         SpriteRenderer[] renderes = GetComponentsInChildren<SpriteRenderer>();
         Assert.IsTrue(renderes.Length >= 2);
 
-        selectedGiftIndex = Random.Range(0, m_gifts.Length);
-        renderes[1].sprite = m_gifts[selectedGiftIndex];
+        selectedGiftIndex = GetNextGiftIndex();
+        renderes[1].sprite = m_gifts[selectedGiftIndex].m_sprite;
     }
 
     private void UpdateNodes()

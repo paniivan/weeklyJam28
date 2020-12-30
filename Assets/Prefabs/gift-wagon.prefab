@@ -97,13 +97,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_gifts:
-  - {fileID: 21300000, guid: bd8276964c2288c42b92faea07b2e3bc, type: 3}
-  - {fileID: 21300000, guid: 226fcbaa35bdce145bb50dd1c212b504, type: 3}
-  - {fileID: 21300000, guid: e0ad11be8c82a8d43aefa8b3650c5a08, type: 3}
-  - {fileID: 21300000, guid: 87b69b08421b4524c9c833116dd366fe, type: 3}
-  - {fileID: 21300000, guid: 117f19091e1bfdd4cb8c84af488c8a2c, type: 3}
-  - {fileID: 21300000, guid: ba5dd96fe11e13d41835ab7c7d416557, type: 3}
-  - {fileID: 21300000, guid: 42c6e639d726da34d98368f52a53735d, type: 3}
+  - m_sprite: {fileID: 21300000, guid: ba5dd96fe11e13d41835ab7c7d416557, type: 3}
+    m_value: 1
+  - m_sprite: {fileID: 21300000, guid: 42c6e639d726da34d98368f52a53735d, type: 3}
+    m_value: 1
+  - m_sprite: {fileID: 21300000, guid: 117f19091e1bfdd4cb8c84af488c8a2c, type: 3}
+    m_value: 1
+  - m_sprite: {fileID: 21300000, guid: 87b69b08421b4524c9c833116dd366fe, type: 3}
+    m_value: 1
+  - m_sprite: {fileID: 21300000, guid: bd8276964c2288c42b92faea07b2e3bc, type: 3}
+    m_value: 1
+  - m_sprite: {fileID: 21300000, guid: 226fcbaa35bdce145bb50dd1c212b504, type: 3}
+    m_value: 1
+  - m_sprite: {fileID: 21300000, guid: e0ad11be8c82a8d43aefa8b3650c5a08, type: 3}
+    m_value: 6
   m_event:
     m_PersistentCalls:
       m_Calls: []
