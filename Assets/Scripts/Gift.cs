@@ -67,7 +67,75 @@ public class Gift : MonoBehaviour
 
         const float speed = 1.25f;
 
-        transform.position = (Vector3)((Vector2)(transform.position) + dir * speed * Time.deltaTime) + new Vector3(0, 0, transform.position.z);
+        Vector2 newPos = (Vector2)(transform.position) + dir * speed * Time.deltaTime;
+
+        //Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        //if (!rb)
+        //{
+        //    return;
+        //}
+        // rb.velocity = dir * speed;
+
+        if (IsPlaceFree(newPos))
+        {
+            transform.position = (Vector3)(newPos) + new Vector3(0, 0, transform.position.z);
+        }
+    }
+
+    public bool IsPlaceFree(Vector2 pos, bool absolute = false)
+    {
+        Collider2D c2d = GetComponent<Collider2D>();
+        if (!c2d)
+        {
+            return false;
+        }
+
+        bool isPlaceFree = true;
+
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(pos, c2d.bounds.extents.magnitude);
+        foreach (Collider2D collider in colliders)
+        {
+            Gift otherGift = collider.GetComponent<Gift>();
+            if (!otherGift)
+            {
+                continue;
+            }
+            if (this == otherGift)
+            {
+                continue;
+            }
+
+            if (absolute)
+            {
+                isPlaceFree = false;
+                break;
+            }
+
+            if (m_prevNode == otherGift.m_prevNode && m_nextNode == otherGift.m_nextNode)
+            {
+                isPlaceFree = false;
+                break;
+            }
+
+            if (m_nextNode == otherGift.m_prevNode)
+            {
+                isPlaceFree = false;
+                break;
+            }
+
+            if (m_nextNode == otherGift.m_nextNode)
+            {
+                float distanceToNode = Vector2.Distance(transform.position, m_nextNode.transform.position);
+                float otherDistanceToNode = Vector2.Distance(otherGift.transform.position, m_nextNode.transform.position);
+                if (distanceToNode > otherDistanceToNode)
+                {
+                    isPlaceFree = false;
+                    break;
+                }
+            }
+        }
+
+        return isPlaceFree;
     }
 
     private void UpdateScore()

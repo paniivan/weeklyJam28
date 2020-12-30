@@ -52,11 +52,19 @@ public class GameController : MonoBehaviour
                 m_spawners[selectedSpawner].transform.position.y,
                 m_gifts[selectedGift].transform.position.z);
 
+
+
             GameObject giftObject = Instantiate(m_gifts[selectedGift], giftPosition, Quaternion.identity);
             Gift gift = giftObject.GetComponent<Gift>();
             if (!gift)
             {
                 continue;
+            }
+
+            if (!gift.IsPlaceFree(gift.transform.position, true))
+            {
+                Destroy(gift.gameObject);
+                break;
             }
 
             gift.m_prevNode = m_spawners[selectedSpawner];
