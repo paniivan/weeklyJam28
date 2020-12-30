@@ -82,13 +82,15 @@ public class GameController : MonoBehaviour
         }
     }
 
-    public void OnGiftReceived(PathNode receiver)
+    public void OnGiftReceived(PathNode receiver, Sprite sprite)
     {
         PathNode result = m_receivers.Find(item => item == receiver);
         if (!result)
         {
             return;
         }
+
+        result.IncreaseCounter(sprite);
 
         m_score += 10;
     }

@@ -3,7 +3,7 @@ using UnityEngine.Assertions;
 using UnityEngine.Events;
 
 [System.Serializable]
-public class GiftReceivedEvent : UnityEvent<PathNode>
+public class GiftReceivedEvent : UnityEvent<PathNode, Sprite>
 {
 }
 
@@ -47,7 +47,6 @@ public class Gift : MonoBehaviour
         }
 
         int sumValue = UnityEngine.Random.Range(0, sum);
-        Debug.Log(sumValue);
 
         int tmpSum = 0;
         for (int i = 0; i < m_gifts.Length; ++i)
@@ -184,7 +183,7 @@ public class Gift : MonoBehaviour
             return;
         }
 
-        m_event.Invoke(m_prevNode);
+        m_event.Invoke(m_prevNode, m_gifts[selectedGiftIndex].m_sprite);
 
         Destroy(gameObject);
     }

@@ -8,6 +8,8 @@ public class PathNode : MonoBehaviour
 
     private int m_selectedNode = 0;
 
+    private Dictionary<Sprite, int> m_counter = new Dictionary<Sprite, int>();
+
     public List<PathNode> getLinks()
     {
         return m_links;
@@ -86,5 +88,29 @@ public class PathNode : MonoBehaviour
         // Debug.Log(angle);
         // Debug.DrawLine((Vector2)transform.position, (Vector2)transform.position + 10 * dir, Color.red);
         sr.transform.rotation = Quaternion.AngleAxis(angle, new Vector3(0, 0, 1));
+    }
+
+    public void IncreaseCounter(Sprite sprite)
+    {
+        if (m_counter.ContainsKey(sprite))
+        {
+            m_counter[sprite]++;
+        }
+        else
+        {
+            m_counter[sprite] = 1;
+        }
+    }
+
+    public string CounterToString()
+    {
+        string str = "";
+
+        foreach (Sprite sprite in m_counter.Keys)
+        {
+            str += string.Format("{0}: {1}\n", sprite.name, m_counter[sprite]);
+        }
+
+        return str;
     }
 }
